@@ -1,0 +1,102 @@
+openapi: 3.0.3
+info:
+  title: STD23056 - TD2
+  version: '1.0.3'
+servers:
+  - url: https://localhost.std23056.com
+paths:
+  /meals:
+    get:
+      parameters:
+        - in: query
+          name: page
+          schema:
+            type: integer
+          required: true
+        - in: query
+          name: pageSize
+          schema:
+            type: integer
+          required: true
+      responses:
+        200:
+          description: Liste des plats
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Meal'
+    post:
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                $ref: '#/components/schemas/CreateMeal'
+        required: true
+      responses:
+        200:
+          description: Liste des nouveaux plats ajoutés
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Meal'
+    put:
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                $ref: '#/components/schemas/Meal'
+        required: true
+      responses:
+        200:
+          description: Liste des plats mise à jour
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Meal'
+    delete:
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                $ref: '#/components/schemas/MealIdentifier'
+        required: true
+      responses:
+        200:
+          description: Liste des plats supprimés
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Meal'
+components:
+  schemas:
+    Meal:
+      allOf:
+        - $ref: '#/components/schemas/MealIdentifier'
+        - $ref: '#/components/schemas/CreateMeal'
+    MealIdentifier:
+      type: object
+      properties:
+        id:
+          type: string
+    CreateMeal:
+      type: object
+      properties:
+        name:
+          type: string
+        price:
+          type: number
+          format: float

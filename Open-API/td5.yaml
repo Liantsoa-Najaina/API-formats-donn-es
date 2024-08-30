@@ -1,0 +1,339 @@
+openapi: 3.0.3
+info:
+  title: STD23056 - TD2
+  version: '1.0.5'
+servers:
+  - url: https://localhost.std23056.com
+paths:
+  /customers:
+    get:
+      parameters:
+        - in: query
+          name: page
+          schema:
+            type: integer
+          required: true
+        - in: query
+          name: pageSize
+          schema:
+            type: integer
+          required: true
+      responses:
+        200:
+          description: Liste des clients
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Customer'
+    post:
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                $ref: '#/components/schemas/CreateCustomer'
+        required: true
+      responses:
+        200:
+          description: Liste des nouveaux clients ajoutés
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Customer'
+    put:
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                $ref: '#/components/schemas/Customer'
+        required: true
+      responses:
+        200:
+          description: Liste des clients mise à jour complètement
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Customer'
+    patch:
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                $ref: '#/components/schemas/PartialCustomerUpdate'
+        required: true
+      responses:
+        200:
+          description: Liste des clients mise à jour partiellement
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Customer'
+  /customers/{customerId}/orders:
+    get:
+      parameters:
+        - in: path
+          name: customerId
+          required: true
+          schema:
+            type: string
+      responses:
+        200:
+          description: Liste des commandes d'un client
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Order'
+    post:
+      parameters:
+        - in: path
+          name: customerId
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateOrder'
+        required: true
+      responses:
+        200:
+          description: Commande ajoutée
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Order'
+    put:
+      parameters:
+        - in: path
+          name: customerId
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Order'
+        required: true
+      responses:
+        200:
+          description: Commande mise à jour complètement
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Order'
+    patch:
+      parameters:
+        - in: path
+          name: customerId
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PartialOrderUpdate'
+        required: true
+      responses:
+        200:
+          description: Commande mise à jour partiellement
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Order'
+  /meals:
+    get:
+      parameters:
+        - in: query
+          name: page
+          schema:
+            type: integer
+          required: true
+        - in: query
+          name: pageSize
+          schema:
+            type: integer
+          required: true
+      responses:
+        200:
+          description: Liste des plats
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Meal'
+    post:
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                $ref: '#/components/schemas/CreateMeal'
+        required: true
+      responses:
+        200:
+          description: Liste des nouveaux plats ajoutés
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Meal'
+    put:
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                $ref: '#/components/schemas/Meal'
+        required: true
+      responses:
+        200:
+          description: Liste des plats mise à jour complètement
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Meal'
+    patch:
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                $ref: '#/components/schemas/PartialMealUpdate'
+        required: true
+      responses:
+        200:
+          description: Liste des plats mise à jour partiellement
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Meal'
+components:
+  schemas:
+    Customer:
+      allOf:
+        - $ref: '#/components/schemas/CustomerIdentifier'
+        - $ref: '#/components/schemas/CreateCustomer'
+    CustomerIdentifier:
+      type: object
+      properties:
+        id:
+          type: string
+    CreateCustomer:
+      type: object
+      properties:
+        name:
+          type: string
+        age:
+          type: integer
+    PartialCustomerUpdate:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        age:
+          type: integer
+    Meal:
+      allOf:
+        - $ref: '#/components/schemas/MealIdentifier'
+        - $ref: '#/components/schemas/CreateMeal'
+    MealIdentifier:
+      type: object
+      properties:
+        id:
+          type: string
+    CreateMeal:
+      type: object
+      properties:
+        name:
+          type: string
+        price:
+          type: number
+          format: float
+    PartialMealUpdate:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        price:
+          type: number
+          format: float
+    Order:
+      type: object
+      properties:
+        id:
+          type: string
+        reference:
+          type: string
+        meals:
+          type: array
+          items:
+            type: object
+            properties:
+              meal:
+                $ref: '#/components/schemas/Meal'
+              quantity:
+                type: integer
+        orderDatetime:
+          type: string
+          format: date-time
+    CreateOrder:
+      type: object
+      properties:
+        reference:
+          type: string
+        meals:
+          type: array
+          items:
+            type: object
+            properties:
+              meal:
+                $ref: '#/components/schemas/MealIdentifier'
+              quantity:
+                type: integer
+    PartialOrderUpdate:
+      type: object
+      properties:
+        id:
+          type: string
+        reference:
+          type: string
+        meals:
+          type: array
+          items:
+            type: object
+            properties:
+              meal:
+                $ref: '#/components/schemas/MealIdentifier'
+              quantity:
+                type: integer
